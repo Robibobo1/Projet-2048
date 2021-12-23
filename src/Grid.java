@@ -1,3 +1,5 @@
+import java.lang.Math;
+import java.util.Random;
 
 public class Grid {
 	int size;
@@ -23,7 +25,16 @@ public class Grid {
 	
 	public void createBloc()
 	{
+		Random r = new Random();
+		int randomX;
+		int randomY;
 		
+		do {
+			randomX = r.nextInt(size);
+			randomY = r.nextInt(size);
+		} while (blocTab[randomX][randomY] != -1);
+		
+		blocTab[randomX][randomY] = 2;
 	}
 	
 	public String drawBloc(int posX, int posY)
@@ -35,4 +46,5 @@ public class Grid {
 	{
 		return "";
 	}
+
 }
