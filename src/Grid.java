@@ -1,5 +1,10 @@
-import java.lang.Math;
+//import java.lang.Math;
 import java.util.Random;
+
+import hevs.graphics.FunGraphics;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Grid {
 	int size;
@@ -46,5 +51,10 @@ public class Grid {
 	{
 		return "";
 	}
-
+	
+	public boolean is2048()
+	{
+		return false;
+	}
+	
 }
