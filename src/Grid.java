@@ -42,7 +42,7 @@ public class Grid {
 		blocTab[randomX][randomY] = 2;
 	}
 	
-	public String drawBloc(int posX, int posY)
+	private String drawBloc(int posX, int posY)
 	{
 		return "";
 	}
@@ -53,6 +53,11 @@ public class Grid {
 	}
 	
 	public boolean is2048()
+	{
+		return false;
+	}
+	
+	public boolean replay()
 	{
 		return false;
 	}

@@ -7,39 +7,29 @@ public class Application {
 	public enum StateMachine {
 		START, WAIT_INPUT, MOVE, END, STOP
 	}
+	
+	int direction = -1;
+	boolean keyChange;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	Application() {
 		StateMachine state = StateMachine.START;
 		Grid gameGrid = new Grid(5);
 		FunGraphics funGraphics;
-		// KeyEvent myKeyboard = new KeyEvent(a);
-
-		// Inits the graphic window
 		funGraphics = new FunGraphics(640, 480);
-		
-		funGraphics.setKeyManager(new KeyAdapter() {
 
+		funGraphics.setKeyManager(new KeyAdapter() {
 			// Will be called when a key has been pressed
 			public void keyPressed(KeyEvent e) {
-
-				if (e.getKeyCode() == KeyEvent.VK_UP) {
-					System.out.println("UP");
-				}
-				if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-					System.out.println("DOWN");
-				}
-				if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					System.out.println("RIGHT");
-				}
-				if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-					System.out.println("LEFT");
-				}
+				if (e.getKeyCode() == KeyEvent.VK_UP) direction = 0;
+				if (e.getKeyCode() == KeyEvent.VK_DOWN) direction = 1;
+				if (e.getKeyCode() == KeyEvent.VK_RIGHT) direction = 2;
+				if (e.getKeyCode() == KeyEvent.VK_LEFT) direction = 3;
+				else direction = -1;
+				keyChange = true;
 			}
 		});
 
-		while (gameGrid.is2048() == true) {
+		while (true) {
 			switch (state) {
 			case START: {
 				gameGrid.createBloc();
@@ -48,15 +38,23 @@ public class Application {
 			}
 				break;
 			case WAIT_INPUT: {
-				
+				if (keyChange == true)
+				{
+					keyChange = false;
+					state = StateMachine.MOVE;
+				}
 			}
 				break;
 			case MOVE: {
-
+				gameGrid.moveBlocs(direction);
+				gameGrid.createBloc();
+				gameGrid.drawGrid();
+				
+				state = (gameGrid.is2048()) ? StateMachine.END : StateMachine.WAIT_INPUT;
 			}
 				break;
 			case END: {
-
+				state = (gameGrid.replay()) ? StateMachine.START : StateMachine.STOP;
 			}
 				break;
 			case STOP: {
@@ -69,6 +67,11 @@ public class Application {
 			}
 		}
 	}
-	
-	
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Application game = new Application();
+
+	}
 }
