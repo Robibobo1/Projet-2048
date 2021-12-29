@@ -1,10 +1,6 @@
 //import java.lang.Math;
 import java.util.Random;
-
 import hevs.graphics.FunGraphics;
-
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class Grid {
 	int size;
@@ -44,12 +40,21 @@ public class Grid {
 	
 	private String drawBloc(int posX, int posY)
 	{
-		return "";
+		String out = "";
+		out += blocTab[posX][posY];
+		return out;
 	}
 	
 	public String drawGrid()
 	{
-		return "";
+		String out = "";
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				out += (blocTab[j][i] == -1) ? " " + drawBloc(j,i)  : "  " + drawBloc(j,i) ;
+			}
+			out += '\n';
+		}
+		return out;
 	}
 	
 	public boolean is2048()
