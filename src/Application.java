@@ -48,7 +48,7 @@ public class Application {
 			case MOVE: {
 				gameGrid.moveBlocs(direction);
 				gameGrid.createBloc();
-				gameGrid.drawGrid();
+				System.out.println(gameGrid.drawGrid());
 				
 				state = (gameGrid.is2048()) ? StateMachine.END : StateMachine.WAIT_INPUT;
 			}
