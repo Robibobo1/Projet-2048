@@ -59,12 +59,12 @@ public class Grid {
 	
 	public boolean is2048()
 	{
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if(blocTab[j][i] == 2048) return true;
+			}
+		}
 		return false;
-	}
-	
-	public boolean replay()
-	{
-		return false;
-	}
+	}	
 	
 }
