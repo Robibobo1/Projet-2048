@@ -24,7 +24,7 @@ public class Application {
 				if (e.getKeyCode() == KeyEvent.VK_DOWN) direction = 1;
 				if (e.getKeyCode() == KeyEvent.VK_RIGHT) direction = 2;
 				if (e.getKeyCode() == KeyEvent.VK_LEFT) direction = 3;
-				else direction = -1;
+			
 				keyChange = true;
 			}
 		});
