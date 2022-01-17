@@ -1,4 +1,3 @@
-import hevs.graphics.FunGraphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -13,10 +12,10 @@ public class Application {
 
 	Application() {
 		StateMachine state = StateMachine.START;
-		FunGraphics funGraphics;
-		funGraphics = new FunGraphics(640, 480);
 		Grid gameGrid = null; 
-		funGraphics.setKeyManager(new KeyAdapter() {
+		Windows appWindows = new Windows(640,480);
+		
+		appWindows.funGraphics.setKeyManager(new KeyAdapter() {
 			// Will be called when a key has been pressed
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_UP) direction = 0;
@@ -30,8 +29,8 @@ public class Application {
 		while (true) {
 			switch (state) {
 			case START: {
-				int gridSize = Integer.parseInt(Dialogs.getString("Largeur de la grille: "));
-				gameGrid = new Grid(gridSize);
+				gameGrid = new Grid(appWindows.start());
+				appWindows.insertGameGrid(gameGrid);
 				gameGrid.createBloc();
 				gameGrid.createBloc();
 				state = StateMachine.WAIT_INPUT;
@@ -48,19 +47,18 @@ public class Application {
 			case MOVE: {
 				gameGrid.moveBlocs(direction);
 				gameGrid.createBloc();
+				appWindows.drawGrid();
 				System.out.println(gameGrid.drawGrid());
 				
 				state = (gameGrid.is2048()) ? StateMachine.END_WIN : StateMachine.WAIT_INPUT;
 			}
 				break;
 			case END_WIN: {
-				char userInput = Dialogs.getChar("Bravo ! Tu as gagné ! Veux tu rejouer ? ");
-				state = (userInput == '1') ? StateMachine.START : StateMachine.STOP;
+				state = (appWindows.win() == '1') ? StateMachine.START : StateMachine.STOP;
 			}
 				break;
 			case END_LOOSE: {
-				char userInput = Dialogs.getChar("Bravo ! Tu as gagné ! Veux tu rejouer ? ");
-				state = (userInput == '1') ? StateMachine.START : StateMachine.STOP;
+				state = (appWindows.lose() == '1') ? StateMachine.START : StateMachine.STOP;
 			}
 			case STOP: {
 
@@ -75,7 +73,6 @@ public class Application {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
 		Application game = new Application();
 
 	}
