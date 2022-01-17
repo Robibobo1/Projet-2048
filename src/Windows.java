@@ -5,18 +5,26 @@ public class Windows {
 	Grid gameGrid;
 	FunGraphics funGraphics;
 	int blocSize = 50;
+	int lineWidth = 4;
+	int gridOffsetX, gridOffsetY, gridSize;
+	int winWidth, winHeight;
 	
 	Windows(int width,int height)
 	{
 		funGraphics = new FunGraphics(width, height);
+		winWidth = width;
+		winHeight = height;
 	}
 	
 	void insertGameGrid(Grid gameGrid)
 	{
 		this.gameGrid = gameGrid;
+		gridSize = lineWidth + (blocSize - lineWidth) * gameGrid.size;
+		gridOffsetX = (winWidth - gridSize) / 2;
+		gridOffsetY = (winHeight - gridSize) / 2;
 	}
 	
-	private Color caseColor(int x, int y)
+	private Color blocColor(int x, int y)
 	{
 		if(gameGrid.blocTab[x][y] == -1)
 		{
@@ -24,21 +32,29 @@ public class Windows {
 		}
 		else
 		{
-			int varColor = (int)(Math.log(gameGrid.blocTab[x][y]) / Math.log(2) * 25.5) ;
+			int varColor = (int)(Math.log(gameGrid.blocTab[x][y]) / Math.log(2) * 21) ;
 			Color colorOut = new Color(255,255-varColor,255-varColor);
-			System.out.println(colorOut);
 			return colorOut;
 		}
-		
 	}
 	
 	void drawBloc(int x, int y)
 	{
-		int lineWidth = 5;
+		int blocXPosition = gridOffsetX + x * (blocSize - lineWidth); 
+		int blocYPosition = gridOffsetY + y * (blocSize - lineWidth); 
+		
 		funGraphics.setColor(Color.BLACK);
-		funGraphics.drawFillRect(10 + x * blocSize + lineWidth,10 + y * blocSize + lineWidth, blocSize, blocSize);
-		funGraphics.setColor(caseColor(x,y));
-		funGraphics.drawFillRect(10 + x * blocSize + lineWidth,11 + y * blocSize + lineWidth, blocSize - lineWidth, blocSize - lineWidth);
+		funGraphics.drawFillRect(blocXPosition , blocYPosition, blocSize, blocSize);
+		
+		funGraphics.setColor(blocColor(x,y));
+		funGraphics.drawFillRect(blocXPosition + lineWidth, blocYPosition + lineWidth, blocSize - (2 * lineWidth), blocSize - (2 * lineWidth));
+		
+		String blocValue = "" + gameGrid.blocTab[x][y];
+		int stringOffset[] = { 22, 18, 14, 9};
+		if(gameGrid.blocTab[x][y] != -1)
+		{
+			funGraphics.drawString(blocXPosition + stringOffset[blocValue.length() - 1] , blocYPosition + 30, blocValue, Color.BLACK, 15);
+		}
 	}
 	
 	void drawGrid()
@@ -52,16 +68,19 @@ public class Windows {
 	
 	int start()
 	{
-		return Integer.parseInt(Dialogs.getString("Largeur de la grille: "));
+		funGraphics.setColor(Color.WHITE);
+		funGraphics.drawFillRect(0, 0, winWidth, winHeight);
+		return Integer.parseInt(Dialogs.getString("Largeur de la grille: (3 = 3x3)"));
 	}
 	
 	char win()
 	{
-		return Dialogs.getChar("Bravo ! Tu as gagnÃ© ! Veux tu rejouer ? ");
+		
+		return Dialogs.getChar("Bravo ! Tu as gagné ! Veux tu rejouer ? y/n");
 	}
 	
 	char lose()
 	{
-		return Dialogs.getChar("Bravo ! Tu as gagnÃ© ! Veux tu rejouer ? ");
+		return Dialogs.getChar("Bravo ! Tu as gagné ! Veux tu rejouer ? y/n");
 	}
 }
