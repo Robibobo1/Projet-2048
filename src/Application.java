@@ -2,6 +2,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Application {
+	
+	boolean EZMode = false;
 
 	public enum StateMachine {
 		START, WAIT_INPUT, MOVE, END_WIN, END_LOOSE, STOP
@@ -33,7 +35,7 @@ public class Application {
 		while (true) {
 			switch (state) {
 				case START: {
-					gameGrid = new Grid(appWindows.start());
+					gameGrid = new Grid(appWindows.start(),EZMode);
 					appWindows.insertGameGrid(gameGrid);
 					appWindows.drawGrid();
 					gameGrid.createBloc();
@@ -55,6 +57,7 @@ public class Application {
 					System.out.println(gameGrid.drawGrid());
 	
 					state = (gameGrid.is2048()) ? StateMachine.END_WIN : StateMachine.WAIT_INPUT;
+					state = (gameGrid.hasLost()) ? StateMachine.END_LOOSE : state;
 				}
 					break;
 				case END_WIN: {
