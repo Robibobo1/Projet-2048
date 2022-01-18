@@ -1,13 +1,16 @@
 //import java.lang.Math;
 import java.util.Random;
-import hevs.graphics.FunGraphics;
+
 
 public class Grid {
 	int size;
 	int blocTab[][];
+	boolean gameIsFull = false;
+	boolean EZMode = false;
 	
-	Grid(int size)
+	Grid(int size,boolean EZMode)
 	{
+		this.EZMode = EZMode;
 		this.size = size;
 		blocTab = new int[size][size];
 		
@@ -249,11 +252,27 @@ public class Grid {
 		int randomY;
 		
 		do {
+			isFull();
+			if(gameIsFull) return;
 			randomX = r.nextInt(size);
 			randomY = r.nextInt(size);
 		} while (blocTab[randomX][randomY] != -1);
 		
-		blocTab[randomX][randomY] = 2;
+		blocTab[randomX][randomY] = (EZMode) ? 256 : 2;
+	}
+	
+	private void isFull()
+	{
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if(blocTab[j][i] == -1) 
+				{
+					gameIsFull = false;
+					return;
+				}
+			}
+		}
+		gameIsFull = true;
 	}
 	
 	private String drawBloc(int posX, int posY)
@@ -283,6 +302,33 @@ public class Grid {
 			}
 		}
 		return false;
-	}	
+	}
+	
+	public boolean hasLost()
+	{
+		if(gameIsFull == false) return false;
+		
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if(j != 0 && blocTab[j - 1][i] == blocTab[j][i])
+				{
+					return false;
+				}
+				if(j != size - 1 && blocTab[j + 1][i] == blocTab[j][i])
+				{
+					return false;
+				}
+				if(i != 0 && blocTab[j][i - 1] == blocTab[j][i])
+				{
+					return false;
+				}
+				if(i != size - 1  && blocTab[j][i + 1] == blocTab[j][i])
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	
 }

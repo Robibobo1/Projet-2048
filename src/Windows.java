@@ -81,6 +81,6 @@ public class Windows {
 	
 	char lose()
 	{
-		return Dialogs.getChar("Bravo ! Tu as gagné ! Veux tu rejouer ? y/n");
+		return Dialogs.getChar("Tu as perdu ! Veux tu quand même rejouer ? y/n");
 	}
 }
