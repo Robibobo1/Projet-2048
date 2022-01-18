@@ -21,225 +21,74 @@ public class Grid {
 	
 	public void moveBlocs(int direction)
 	{				
-		System.out.println("Move "+direction);
-
-		switch(direction)
+		int line = 0,column = 0;// cases du tableau
+		int empty = 0;// compte les cases vides
+		int bloc = 0;// récupère le bloc désiré dans la grille
+		int previous_bloc = -1; // bloc précédent
+		
+		// boucles permettant de scanner la grille
+		for(int x = 0;x < size;x++) 
 		{
-		case 0:
-			move_up();
-			break;	
-			
-		case 1:
-			move_down();
-			break;
-			
-		case 2:
-			//move_right();
-			move_left_right(2);
-			break;
-			
-		case 3:
-			move_left_right(3);
-			break;
-		}
-		
-		
-	}
-		
-	
-	public void move_left_right(int direction)
-	{
-		int l = 0,c = 0;
-		//dï¿½placement vers la droite	
-		for(int x = 0;x < size;x++) // lignes
-		{
-			for(int y = 0; y < size; y++) // colonnes
+			for(int y = 0; y < size; y++) 
 			{
-				if(direction == 2)
-				{
-					l = size-1-x;
-					c = size-1-y;
-				}
-				if(direction == 3)
-				{
-				 l = x;
-				 c = y;
-				}
+				// choix des valeurs de line et column selon direction
+				if(direction == 2||direction == 1)
+				{line = size-1-x;
+				column = size-1-y;}
+				
+				if(direction == 3||direction == 0)
+				{line = x;
+				 column = y;}
 
 				
-				if(blocTab[c][l] != -1) // si la case contient un bloc
-				{
-					// on va lire toutes les colonnes qui prï¿½cï¿½dent ce bloc, et si on dï¿½tecte du vide ou un bloc semblable, on effectue un dï¿½calage
-					
-					int idx = c; // on mï¿½morise la colonne ï¿½ laquelle on se trouve
-					
-					if(direction == 2)
-					{
-					while(idx <= size-1 &&  (blocTab[idx][l] == -1 || blocTab[idx][l] == blocTab[c][l]))
-					{idx ++;}
-					idx -=1;
-					}
-					if(direction == 3)
-					{
-					while(idx >= 0 &&  (blocTab[idx][l] == -1 || blocTab[idx][l] == blocTab[c][l]))
-					{idx --;}
-					idx+=1;
-					}
-					if(c != idx)// si on a au moins bougï¿½ d'une case
-					{
-						if(blocTab[idx][l] == blocTab[c][l]) // si le dernier bloc a la mï¿½me valeur que le bloc actuel
-						{
-							blocTab[idx][l] *= 2; // on double la valeur de la case du fond
-							blocTab[c][l] = -1;//on vide l'ancienne case du bloc
-						}
-						else
-						{
-							blocTab[idx][l] = blocTab[c][l];//on dï¿½place le bloc actuel
-							blocTab[c][l] = -1;//on vide l'ancienne case du bloc
-						}
-					}
-					
-				}
+				if(direction == 2||direction == 3)
+				bloc = blocTab[column][line];
 				
+				if(direction == 1||direction == 0)
+				bloc = blocTab[line][column];				
+							
+					
+				if(bloc != -1) // si la case contient un bloc
+				{				
+					int idx = 1;
+					
+					if(bloc == previous_bloc) // si le bloc précédent est le même que l'actuel	
+					{empty++;// on bouge d'une case en plus
+					idx = 2;// on double la valeur du bloc
+					previous_bloc = -1;} // réinitialisation de la variable
+					else
+					previous_bloc = bloc; // sauvegarde du bloc actuel
+
+					if(empty != 0) // si on peut au moins bouger d'une case 
+					{	
+						if(direction == 3||direction == 0) // on inverse la variable empty selon la direction
+						empty *= -1;
+						
+						// déplacement des blocs selon le sens
+						if(direction == 2||direction == 3)
+						{
+						blocTab[column+empty][line] = blocTab[column][line] *idx;
+						blocTab[column][line] = -1;	
+						}
+						
+						if(direction == 1||direction == 0)	
+						{
+							blocTab[line][column+empty] = blocTab[line][column] *idx;
+							blocTab[line][column] = -1;	
+						}
+						
+						empty = Math.abs(empty); // redressage de la variable empty
+					}
+					}
+				else
+				empty++;
 			}
-		}		
+			empty = 0; // reset de empty à chaque changement de lignes
+			previous_bloc = -1; // reset de la variable previous bloc 
+		}				
 	}
-	
-	public void move_up_down(int direction)
-	{
-		int l = 0,c = 0;
 		
-		//dï¿½placement vers le haut	
-		for(int x = 0;l < size;x++) // lignes
-		{
-			for(int y = 1; y < size; y++) // colonnes 
-			{
-				if(direction == 1)
-				{
-					l = size-1-x;
-					c = size-1-y;
-				}
-				if(direction == 0)
-				{
-				 l = x;
-				 c = y;
-				}
-				
-				if(blocTab[l][c] != -1) // si la case contient un bloc
-				{
-					// on va lire toutes les colonnes qui prï¿½cï¿½dent ce bloc, et si on dï¿½tecte du vide ou un bloc semblable, on effectue un dï¿½calage
-					
-					int idx = c; // on mï¿½morise la colonne ï¿½ laquelle on se trouve
-					
-					if(direction == 0)
-					{
-					while(idx >= 0 &&  (blocTab[l][idx] == -1 || blocTab[l][idx] == blocTab[l][c]))
-					{idx --;}
-					idx+=1;
-					}
-					if(direction == 1)
-					{
-						while(idx <= size-1 &&  (blocTab[l][idx] == -1 || blocTab[l][idx] == blocTab[l][c]))
-						{idx ++;}
-						idx -=1;
-					}
-					
-					
-					if(c != idx)// si on a au moins bougï¿½ d'une case
-					{
-						if(blocTab[l][idx] == blocTab[l][c]) // si le dernier bloc a la mï¿½me valeur que le bloc actuel
-						{
-							blocTab[l][idx] *= 2; // on double la valeur de la case du fond
-							blocTab[l][c] = -1;//on vide l'ancienne case du bloc
-						}
-						else
-						{
-							blocTab[l][idx] = blocTab[l][c];//on dï¿½place le bloc actuel
-							blocTab[l][c] = -1;//on vide l'ancienne case du bloc
-						}
-					}
-					
-				}
-				
-			}
-		}
-	}
 	
-	public void move_up()
-	{
-		//dï¿½placement vers le haut	
-		for(int l = 0;l < size;l++) // lignes
-		{
-			for(int c = 1; c < size; c++) // colonnes 
-			{
-				
-				if(blocTab[l][c] != -1) // si la case contient un bloc
-				{
-					// on va lire toutes les colonnes qui prï¿½cï¿½dent ce bloc, et si on dï¿½tecte du vide ou un bloc semblable, on effectue un dï¿½calage
-					
-					int idx = c; // on mï¿½morise la colonne ï¿½ laquelle on se trouve
-					
-					while(idx >= 0 &&  (blocTab[l][idx] == -1 || blocTab[l][idx] == blocTab[l][c]))
-					{idx --;}
-					
-					if(c != idx+1)// si on a au moins bougï¿½ d'une case
-					{
-						if(blocTab[l][idx+1] == blocTab[l][c]) // si le dernier bloc a la mï¿½me valeur que le bloc actuel
-						{
-							blocTab[l][idx+1] *= 2; // on double la valeur de la case du fond
-							blocTab[l][c] = -1;//on vide l'ancienne case du bloc
-						}
-						else
-						{
-							blocTab[l][idx+1] = blocTab[l][c];//on dï¿½place le bloc actuel
-							blocTab[l][c] = -1;//on vide l'ancienne case du bloc
-						}
-					}
-					
-				}
-				
-			}
-		}
-	}
-	
-	
-	
-	
-	public void move_down()
-	{
-		for(int l = size-1;l >= 0;l--) // lignes
-		{
-			for(int c = size-1; c >= 0; c--) 
-			{
-				
-				if(blocTab[l][c] != -1) // si la case contient un bloc
-				{
-					// on va lire toutes les colonnes qui prï¿½cï¿½dent ce bloc, et si on dï¿½tecte du vide ou un bloc semblable, on effectue un dï¿½calage
-					
-					int idx = c; // on mï¿½morise la colonne ï¿½ laquelle on se trouve
-					
-					while(idx <= size-1 &&  (blocTab[l][idx] == -1 || blocTab[l][idx] == blocTab[l][c]))
-					{idx ++;}
-										
-					if(c != idx-1)// si on a au moins bougï¿½ d'une case
-					{
-						if(blocTab[l][idx-1] == blocTab[l][c]) // si le dernier bloc a la mï¿½me valeur que le bloc actuel
-						{
-							blocTab[l][idx-1] *= 2; // on double la valeur de la case du fond
-							blocTab[l][c] = -1;//on vide l'ancienne case du bloc
-						}
-						else
-						{
-							blocTab[l][idx-1] = blocTab[l][c];//on dï¿½place le bloc actuel
-							blocTab[l][c] = -1;//on vide l'ancienne case du bloc
-						}
-					}
-					
-				}
-				
-			}
-		}		
-	}
 	
 	
 	public void createBloc()
