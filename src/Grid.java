@@ -1,13 +1,15 @@
 
 //import java.lang.Math;
 import java.util.Random;
-import hevs.graphics.FunGraphics;
 
 public class Grid {
 	int size;
 	int blocTab[][];
+	boolean gameIsFull = false;
+	boolean EZMode = false;
 
-	Grid(int size) {
+	Grid(int size, boolean EZMode) {
+		this.EZMode = EZMode;
 		this.size = size;
 		blocTab = new int[size][size];
 
@@ -22,8 +24,8 @@ public class Grid {
 	public void moveBlocs(int direction) {
 		int x = 0, y = 0;// cases du tableau
 		int empty = 0;// compte les cases vides
-		int bloc = 0;// récupère le bloc désiré dans la grille
-		int previous_bloc = -1; // bloc précédent
+		int bloc = 0;// rÃ©cupÃ¨re le bloc dÃ©sirÃ© dans la grille
+		int previous_bloc = -1; // bloc prÃ©cÃ©dent
 
 		// boucles permettant de scanner la grille
 		for (int i = 0; i < size; i++) {
@@ -47,12 +49,12 @@ public class Grid {
 				{
 					int idx = 1;
 
-					if (bloc == previous_bloc) // si le bloc précédent est le même que l'actuel
+					if (bloc == previous_bloc) // si le bloc prÃ©cÃ©dent est le mÃªme que l'actuel
 					{
 						empty++;// on bouge d'une case en plus
 						idx = 2;// on double la valeur du bloc
 						previous_bloc = -1;
-					} // réinitialisation de la variable
+					} // rÃ©initialisation de la variable
 					else
 						previous_bloc = bloc; // sauvegarde du bloc actuel
 
@@ -61,7 +63,7 @@ public class Grid {
 						if (direction == 3 || direction == 0) // on inverse la variable empty selon la direction
 							empty *= -1;
 
-						// déplacement des blocs selon le sens
+						// dÃ©placement des blocs selon le sens
 						if (direction == 2 || direction == 3) {
 							blocTab[y + empty][x] = blocTab[y][x] * idx;
 							blocTab[y][x] = -1;
@@ -77,7 +79,7 @@ public class Grid {
 				} else
 					empty++;
 			}
-			empty = 0; // reset de empty à chaque changement de lignes
+			empty = 0; // reset de empty Ã  chaque changement de lignes
 			previous_bloc = -1; // reset de la variable previous bloc
 		}
 	}
@@ -88,11 +90,26 @@ public class Grid {
 		int randomY;
 
 		do {
+			isFull();
+			if (gameIsFull)
+				return;
 			randomX = r.nextInt(size);
 			randomY = r.nextInt(size);
 		} while (blocTab[randomX][randomY] != -1);
 
-		blocTab[randomX][randomY] = 2;
+		blocTab[randomX][randomY] = (EZMode) ? 256 : 2;
+	}
+
+	private void isFull() {
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (blocTab[j][i] == -1) {
+					gameIsFull = false;
+					return;
+				}
+			}
+		}
+		gameIsFull = true;
 	}
 
 	private String drawBloc(int posX, int posY) {
@@ -120,6 +137,29 @@ public class Grid {
 			}
 		}
 		return false;
+	}
+
+	public boolean hasLost() {
+		if (gameIsFull == false)
+			return false;
+
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (j != 0 && blocTab[j - 1][i] == blocTab[j][i]) {
+					return false;
+				}
+				if (j != size - 1 && blocTab[j + 1][i] == blocTab[j][i]) {
+					return false;
+				}
+				if (i != 0 && blocTab[j][i - 1] == blocTab[j][i]) {
+					return false;
+				}
+				if (i != size - 1 && blocTab[j][i + 1] == blocTab[j][i]) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 }
