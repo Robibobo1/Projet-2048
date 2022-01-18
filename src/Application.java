@@ -2,7 +2,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Application {
-	
+
 	boolean EZMode = false;
 
 	public enum StateMachine {
@@ -34,45 +34,45 @@ public class Application {
 
 		while (true) {
 			switch (state) {
-				case START: {
-					gameGrid = new Grid(appWindows.start(),EZMode);
-					appWindows.insertGameGrid(gameGrid);
-					appWindows.drawGrid();
-					gameGrid.createBloc();
-					gameGrid.createBloc();
-					state = StateMachine.WAIT_INPUT;
+			case START: {
+				gameGrid = new Grid(appWindows.start(), EZMode);
+				appWindows.insertGameGrid(gameGrid);
+				appWindows.drawGrid();
+				gameGrid.createBloc();
+				gameGrid.createBloc();
+				state = StateMachine.WAIT_INPUT;
+			}
+				break;
+			case WAIT_INPUT: {
+				if (keyChange == true) {
+					keyChange = false;
+					state = StateMachine.MOVE;
 				}
-					break;
-				case WAIT_INPUT: {
-					if (keyChange == true) {
-						keyChange = false;
-						state = StateMachine.MOVE;
-					}
-				}
-					break;
-				case MOVE: {
-					gameGrid.moveBlocs(direction);
-					gameGrid.createBloc();
-					appWindows.drawGrid();
-					System.out.println(gameGrid.drawGrid());
-	
-					state = (gameGrid.is2048()) ? StateMachine.END_WIN : StateMachine.WAIT_INPUT;
-					state = (gameGrid.hasLost()) ? StateMachine.END_LOOSE : state;
-				}
-					break;
-				case END_WIN: {
-					state = (appWindows.win() == 'y') ? StateMachine.START : StateMachine.STOP;
-				}
-					break;
-				case END_LOOSE: {
-					state = (appWindows.lose() == 'y') ? StateMachine.START : StateMachine.STOP;
-				}
-				case STOP: {
-				}
-					break;
-				default: {
-					throw new IllegalArgumentException("Unexpected value");
-				}
+			}
+				break;
+			case MOVE: {
+				gameGrid.moveBlocs(direction);
+				gameGrid.createBloc();
+				appWindows.drawGrid();
+				System.out.println(gameGrid.drawGrid());
+
+				state = (gameGrid.is2048()) ? StateMachine.END_WIN : StateMachine.WAIT_INPUT;
+				state = (gameGrid.hasLost()) ? StateMachine.END_LOOSE : state;
+			}
+				break;
+			case END_WIN: {
+				state = (appWindows.win() == 'y') ? StateMachine.START : StateMachine.STOP;
+			}
+				break;
+			case END_LOOSE: {
+				state = (appWindows.lose() == 'y') ? StateMachine.START : StateMachine.STOP;
+			}
+			case STOP: {
+			}
+				break;
+			default: {
+				throw new IllegalArgumentException("Unexpected value");
+			}
 			}
 		}
 	}
