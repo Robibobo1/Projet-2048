@@ -10,7 +10,7 @@ public class Windows {
 	int winWidth, winHeight;
 
 	Windows(int width, int height) {
-		funGraphics = new FunGraphics(width, height);
+		funGraphics = new FunGraphics(width, height, "2048 HES Style");
 		winWidth = width;
 		winHeight = height;
 	}
@@ -62,15 +62,26 @@ public class Windows {
 	int start() {
 		funGraphics.setColor(Color.WHITE);
 		funGraphics.drawFillRect(0, 0, winWidth, winHeight);
-		return Integer.parseInt(Dialogs.getString("Largeur de la grille: (4 = 4x4)"));
+		while (true) {
+			char usrChar = Dialogs.getChar("Largeur de la grille: (1 à 8)");
+			if (usrChar >= '1' && usrChar <= '8')
+				return usrChar - '0';
+		}
 	}
 
-	char win() {
-
-		return Dialogs.getChar("Bravo ! Tu as gagné ! Veux tu rejouer ? y/n");
+	boolean win() {
+		while (true) {
+			char usrChar = Dialogs.getChar("Bravo ! Tu as gagné ! Veux tu rejouer ? y/n");
+			if (usrChar == 'y')
+				return true;
+		}
 	}
 
-	char lose() {
-		return Dialogs.getChar("Tu as perdu ! Veux tu quand même rejouer ? y/n");
+	boolean lose() {
+		while (true) {
+			char usrChar = Dialogs.getChar("Tu as perdu ! Veux tu quand même rejouer ? y/n");
+			if (usrChar == 'y')
+				return true;
+		}
 	}
 }
