@@ -1,5 +1,3 @@
-
-//import java.lang.Math;
 import java.util.Random;
 
 
@@ -28,7 +26,7 @@ public class Grid {
 
 	}
 
-	// cette fonction déplace les blocs dans la grille selon la valeur de la variable direction
+	// cette fonction deplace les blocs dans la grille selon la valeur de la variable direction
 	// 0 -> Up
 	// 1 -> Down
 	// 2 -> Right
@@ -53,7 +51,7 @@ public class Grid {
 				}
 
 				// inversion de X et Y dans les cases du tableau selon direction
-				// on récupère la valeur de la case souhaitée dans la variable bloc
+				// on recupere la valeur de la case souhaitee dans la variable bloc
 				if (direction == 2 || direction == 3)
 					bloc = blocTab[y][x];
 				if (direction == 1 || direction == 0)
@@ -61,13 +59,13 @@ public class Grid {
 
 				if (bloc != -1) // si la case n'est pas vide
 				{
-					int idx = 1; // gain appliqué au bloc
+					int idx = 1; // gain applique au bloc
 
 					if (bloc == previous_bloc) // si le bloc prÃ©cÃ©dent est le mÃªme que l'actuel
 					{
 						empty++;// on bouge d'une case en plus
 						idx = 2;// on double la valeur du gain
-						previous_bloc = -1; // réinitialissation de previous bloc
+						previous_bloc = -1; // reinitialissation de previous bloc
 					} 
 					else
 						previous_bloc = bloc; // sauvegarde du bloc actuel
@@ -77,7 +75,7 @@ public class Grid {
 						if (direction == 3 || direction == 0) // on inverse la variable empty selon la direction
 							empty *= -1;
 
-						// déplacement des blocs selon le sens à l'aide de empty et idx
+						// deplacement des blocs selon le sens a l'aide de empty et idx
 						if (direction == 2 || direction == 3) {
 							blocTab[y + empty][x] = blocTab[y][x] * idx;
 							blocTab[y][x] = -1;
@@ -98,27 +96,27 @@ public class Grid {
 		}
 	}
 
-	// créée un nouveau bloc de valeur de à une position random dans la grille
+	// cree un nouveau bloc d'une valeur position random dans la grille
 	public void createBloc() {
 		Random r = new Random();
 		// valeurs X et Y random
 		int randomX;
 		int randomY;
 
-		isFull(); // on vérifie si la grille est pleine
+		isFull(); // on verifie si la grille est pleine
 		if (gameIsFull) // on quitte la fonction si la grille est pleine
 		return;
 		
 		do {			
-			// génération des valeurs random dans la plage size
+			// generation des valeurs random dans la plage size
 			randomX = r.nextInt(size);
 			randomY = r.nextInt(size);
-		} while (blocTab[randomX][randomY] != -1); // si la case est déjà pleine, on regénère de nouvelles valeurs random 
+		} while (blocTab[randomX][randomY] != -1); // si la case est deja pleine, on regenere de nouvelles valeurs random 
 
-		blocTab[randomX][randomY] = (EZMode) ? 256 : 2; // on crée le nouveau bloc (si on est en mode easy, il vaut 256 sinon 2)
+		blocTab[randomX][randomY] = (EZMode) ? 256 : 2; // on cree le nouveau bloc (si on est en mode easy, il vaut 256 sinon 2)
 	}
 
-	// cette fonction vérifie si la grille est pleine
+	// cette fonction verifie si la grille est pleine
 	private void isFull() {
 		// boucles permettant de lire les cases de la grille
 		for (int i = 0; i < size; i++) {
@@ -134,21 +132,21 @@ public class Grid {
 
 	
 	
-	// cette fonction sert à afficher la grille dans la console
+	// cette fonction sert a afficher la grille dans la console
 	public String toString() {
-		String out = ""; // variable retournée
+		String out = ""; // variable retournee
 		
 		// boucles permettant la lecture des cases de la grille
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				out += (blocTab[j][i] == -1) ? " " + blocTab[j][i] : "  " + blocTab[j][i]; // ajout de la case à out
+				out += (blocTab[j][i] == -1) ? " " + blocTab[j][i] : "  " + blocTab[j][i];
 			}
-			out += '\n'; // ajout d'un retour à la ligne
+			out += '\n'; // ajout d'un retour a la ligne
 		}
 		return out;
 	}
 
-	// cette fonction vérifie si on a gagné (renvoie true si c'est le cas)
+	// cette fonction verifie si on a gagne (renvoie true si c'est le cas)
 	public boolean is2048() {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
@@ -159,7 +157,7 @@ public class Grid {
 		return false; // si aucune des cases vaut 2048, on renvoie false
 	}
 
-	// vérifie si on a perdu (renvoie true si c'est le cas)
+	// verifie si on a perdu (renvoie true si c'est le cas)
 	public boolean hasLost() {
 		if (gameIsFull == false) // si la grille n'est pas pleine
 			return false; // on n'a pas encore perdu
@@ -167,7 +165,7 @@ public class Grid {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				
-				// on vérifie dans toutes les direction si au moins deux blocs identiques sont à côtés
+				// on verifie dans toutes les direction si au moins deux blocs identiques sont a cotes
 				// on retourne false si c'est le cas
 				if (j != 0 && blocTab[j - 1][i] == blocTab[j][i]) {
 					return false;
